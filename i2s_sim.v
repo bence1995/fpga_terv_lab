@@ -69,24 +69,28 @@ module i2s_sim ();
     localparam data = 32'h12345678;
     reg [5:0] cntr;
     
-    always @ (posedge tb_bclk)
+    always @ (negedge tb_bclk)
     begin
         if(tb_rst)
             cntr <= 0;
         else begin
             
-            cntr <= cntr + 1;
-        
-            tb_lrclk <= cntr[5];
-        
-            tb_sdi <= data[31 - cntr[4:0]];
-        
+            //if(tb_bclk) begin
+                cntr <= cntr + 1;
+            
+                
+            
+                tb_sdi <= data[31 - cntr[4:0]];
+            //end
+            
         end
     end
     
-    
     always @ (negedge tb_bclk)
     begin
-       tb_lrclk <= cntr[5];
+        tb_lrclk <= cntr[5];
     end
+    
+    
+
 endmodule
