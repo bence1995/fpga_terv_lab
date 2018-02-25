@@ -1,35 +1,14 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 02/15/2018 09:29:31 PM
-// Design Name: 
-// Module Name: i2s_sim
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module i2s_sim ();
-
     reg tb_clk;
     reg tb_rst;
+    reg tb_en;
     
     reg tb_lrclk; 
     reg tb_bclk;
     reg tb_sdi;
-    
-    wire tb_en;
+        
     wire tb_adc_valid_l;
     wire tb_adc_valid_r;
     wire [23:0] tb_adc_data;
@@ -50,6 +29,7 @@ module i2s_sim ();
     initial begin
         tb_clk <= 0;
         tb_rst <= 1;
+        tb_en <= 1;
         tb_lrclk <= 0;
         tb_bclk <= 0;
         tb_sdi <= 0;
@@ -62,8 +42,8 @@ module i2s_sim ();
     //GENERATE CLOCK (100MHz)
     always #5 tb_clk = ~tb_clk;
     
-    //GENERATE BCLK (25MHz)
-    always #200 tb_bclk = ~tb_bclk;
+    //GENERATE BCLK (~6.144MHz)
+    always #163 tb_bclk = ~tb_bclk;
     
     //GENERATE LRCLK (25MHz / 32), LOAD SDI
     localparam data = 32'h12345678;
@@ -75,22 +55,12 @@ module i2s_sim ();
             cntr <= 0;
         else begin
             
-            //if(tb_bclk) begin
-                cntr <= cntr + 1;
-            
-                
-            
-                tb_sdi <= data[31 - cntr[4:0]];
-            //end
+            cntr <= cntr + 1;
+        
+            tb_lrclk <= cntr[5];
+        
+            tb_sdi <= data[31 - cntr[4:0]];
             
         end
     end
-    
-    always @ (negedge tb_bclk)
-    begin
-        tb_lrclk <= cntr[5];
-    end
-    
-    
-
 endmodule
