@@ -18,8 +18,8 @@ int main()
 
 
 	tlast_dnum = 16;
-	smpl_rd_num = 1;
-	tap_num_m1 = 127;
+	smpl_rd_num = 2;
+	tap_num_m1 = 255;
 
 	for (int i = 0; i < (tap_num_m1 + 1) * 2; ++i)
 	{
@@ -35,7 +35,7 @@ int main()
 			din_r = 0;
 		}
 
-		fir_hw(tlast_dnum, smpl_rd_num, tap_num_m1, coeff_128, &din_l, &din_r, &res);
+		fir_hw(tlast_dnum, smpl_rd_num, tap_num_m1, coeff_256, &din_l, &din_r, &res);
 
 		printf("%d \t data: %1.23f\t tlast: %d \n", i, (double)res.tdata, (int)res.tlast);
 	}
